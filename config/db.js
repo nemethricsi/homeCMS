@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose').set('useFindAndModify', false);
 mongoose
   .connect(
     `mongodb://${process.env.HOST}:${process.env.DB_PORT}/${process.env.DB}`,

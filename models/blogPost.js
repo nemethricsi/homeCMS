@@ -11,7 +11,9 @@ const BlogPost = db.model('BlogPost', {
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: () => {
+      return new Date();
+    },
   },
   status: String,
 });

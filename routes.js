@@ -27,6 +27,7 @@ module.exports = (router) => {
     // TODO: autentikáció
     BlogPostModel.find({})
       .populate('_author')
+      .sort({ createdAt: 'descending' })
       .exec((err, blogPosts) => {
         if (err) {
           return next(err);
@@ -50,6 +51,38 @@ module.exports = (router) => {
 
         res.json(blogPost);
       });
+  });
+
+  router.post('/blog-post/new', (req, res) => {
+    // TODO: token auth + userId belőle, vagy username
+    const newPost = new BlogPostModel({
+      title: req.body.title,
+      content: req.body.content,
+      _author: req.body.loggedInUserId,
+    });
+    newPost.save((err, insertedPost) => {
+      if (err) {
+        console.error(`Error in creation: ${err}`);
+      }
+      res.status(201).send(insertedPost);
+    });
+  });
+
+  router.patch('/blog-post/edit/:id', (req, res) => {
+    console.log(req.params.id, req.body);
+    BlogPostModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        title: req.body.title,
+        content: req.body.content,
+      },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+        }
+        res.send(result);
+      }
+    );
   });
 
   router.delete('/blog-post/delete/:id', (req, res) => {
