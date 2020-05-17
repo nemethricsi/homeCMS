@@ -113,11 +113,11 @@ module.exports = (router) => {
         res.send({ error: err });
       } else {
         console.log(req.file);
-        res.json(req.file);
+        res.json({ kep: `uploads/${req.file.filename}` });
       }
     });
   });
   router.get('/pics/:filename', (req, res) => {
-    res.send({ path: `${__dirname}/uploads/${req.params.filename}` });
+    res.send({ path: `/uploads/${req.params.filename}` });
   });
 };
